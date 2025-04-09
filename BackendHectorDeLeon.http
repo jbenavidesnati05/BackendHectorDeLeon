@@ -1,0 +1,6 @@
+@BackendHectorDeLeon_HostAddress = http://localhost:5217
+
+GET {{BackendHectorDeLeon_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
