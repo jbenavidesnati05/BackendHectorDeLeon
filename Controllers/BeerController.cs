@@ -1,5 +1,6 @@
 ﻿using BackendHectorDeLeon.DTOs;
 using BackendHectorDeLeon.Models;
+using BackendHectorDeLeon.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,51 +14,32 @@ namespace BackendHectorDeLeon.Controllers
         private readonly StoreContext _context;
         private readonly IValidator<BeerInsertDto> _beerInsertValidator;
         private readonly IValidator<BeerUpdateDto> _beerUpdateValidator;
+        private IBeerService _beerService;
 
-        public BeerController(StoreContext context, 
+        public BeerController(StoreContext context,
             IValidator<BeerInsertDto> beerInsertValidator,
-            IValidator<BeerUpdateDto> beerUpdateValidator
+            IValidator<BeerUpdateDto> beerUpdateValidator,
+            IBeerService beerService
             )
         {
             _context = context;
             _beerInsertValidator = beerInsertValidator;
             _beerUpdateValidator = beerUpdateValidator;
+            _beerService = beerService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BeerDto>>> Get()
-        {
-            var beers = await _context.Beers.Select(b => new BeerDto
-            {
-                Id = b.BeerId,
-                Name = b.Name,
-                Alcochol = b.Alcohol,
-                BrandId = b.BrandId,
-            }).ToListAsync();
+        public async Task<IEnumerable<BeerDto>> Get()=>
+            await _beerService.Get();
 
-            return Ok(beers);
-        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<BeerDto>> GetById(int id)
         {
-            var b = await _context.Beers.FindAsync(id);
+            var beerDto = await _beerService.GetById(id);
 
-            if (b == null)
-            {
-                return NotFound();
-            }
-
-            var beerDto = new BeerDto
-            {
-                Id = b.BeerId,
-                Name = b.Name,
-                Alcochol = b.Alcohol,
-                BrandId = b.BrandId,
-            };
-            return Ok(beerDto);
+            return beerDto == null ? NotFound() : Ok(beerDto);
         }
-
         [HttpPost]
         public async Task<ActionResult<BeerDto>> Add(BeerInsertDto beerInsertDto)
         {
@@ -65,28 +47,16 @@ namespace BackendHectorDeLeon.Controllers
 
             if (!validationResult.IsValid)
             {
-                return BadRequest(validationResult.Errors);
+                return BadRequest(validationResult.Errors);  // Esto devolverá los errores de validación si los hay
             }
 
-            var beer = new Beer()
-            {
-                Name = beerInsertDto.Name,
-                BrandId = beerInsertDto.BrandId,
-                Alcohol = beerInsertDto.Alcochol
-            };
+            var beerDto = await _beerService.Add(beerInsertDto);
 
-            await _context.Beers.AddAsync(beer);
-            await _context.SaveChangesAsync();
-
-            var beerDto = new BeerDto
-            {
-                Id = beer.BeerId,
-                Name = beer.Name,
-                Alcochol = beer.Alcohol,
-                BrandId = beer.BrandId,
-            };
-            return CreatedAtAction(nameof(GetById), new { id = beer.BeerId }, beerDto);
+            return CreatedAtAction(nameof(GetById), new { id = beerDto.Id }, beerDto);
         }
+
+
+
 
         [HttpPut("{id}")]
         public async Task<ActionResult<BeerDto>> Update(int id, BeerUpdateDto beerUpdateDto)
@@ -122,7 +92,7 @@ namespace BackendHectorDeLeon.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult<BeerDto>> Delete(int id)
         {
             var beer = await _context.Beers.FindAsync(id);
 
@@ -134,7 +104,14 @@ namespace BackendHectorDeLeon.Controllers
             _context.Beers.Remove(beer);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            var beerDto = new BeerDto
+            {
+                Id = beer.BeerId,
+                Name = beer.Name,
+                Alcochol = beer.Alcohol,
+                BrandId = beer.BrandId,
+            };
+            return Ok(beerDto);
         }
     }
 }

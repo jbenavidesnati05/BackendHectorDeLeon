@@ -13,13 +13,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddKeyedSingleton<IPeopleService, PeopleService>("peopleService");
 builder.Services.AddKeyedSingleton<IPeopleService, People2Service>("people2Service");
-
 builder.Services.AddKeyedSingleton<IRamdomService, RamdomService>("ramdomSingleton");
 builder.Services.AddKeyedScoped<IRamdomService, RamdomService>("ramdomScope");
 builder.Services.AddKeyedTransient<IRamdomService, RamdomService>("ramdomTransient");
-
-
+//refactorizando
+builder.Services.AddScoped<IBeerService,BeerService>();
 builder.Services.AddScoped<IPostsService, PostsService>();
+
+
 
 
 builder.Services.AddHttpClient<IPostsService, PostsService>(c =>

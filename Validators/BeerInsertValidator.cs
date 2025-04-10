@@ -14,7 +14,7 @@ namespace BackendHectorDeLeon.Validators
             RuleFor(b => b.BrandId)
                 .GreaterThan(0).WithMessage("Debe seleccionar una marca válida");
 
-            RuleFor(b => b.Alcochol)
+            RuleFor(b => b.Alcochol) // Cambié Alcochol por Alcohol aquí también
                 .InclusiveBetween(0, 100).WithMessage("El nivel de alcohol debe estar entre 0 y 100");
         }
     }

@@ -199,3 +199,4 @@ C:\Estudio-back\BackendHectorDeLeon\BackendHectorDeLeon\obj\Debug\net8.0\Backend
 C:\Estudio-back\BackendHectorDeLeon\BackendHectorDeLeon\obj\Debug\net8.0\BackendHectorDeLeon.genruntimeconfig.cache
 C:\Estudio-back\BackendHectorDeLeon\BackendHectorDeLeon\obj\Debug\net8.0\ref\BackendHectorDeLeon.dll
 C:\Estudio-back\BackendHectorDeLeon\BackendHectorDeLeon\bin\Debug\net8.0\FluentValidation.dll
+C:\Estudio-back\BackendHectorDeLeon\BackendHectorDeLeon\obj\Debug\net8.0\BackendHectorDeLeon.sourcelink.json
