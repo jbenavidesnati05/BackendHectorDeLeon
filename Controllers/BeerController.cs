@@ -62,56 +62,20 @@ namespace BackendHectorDeLeon.Controllers
         public async Task<ActionResult<BeerDto>> Update(int id, BeerUpdateDto beerUpdateDto)
         {
             var validationResult = await _beerUpdateValidator.ValidateAsync(beerUpdateDto);
-
-
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
             }
-
-            var beer = await _context.Beers.FindAsync(id);
-
-            if (beer == null)
-            {
-                return NotFound();
-            }
-
-            beer.Name = beerUpdateDto.Name;
-            beer.Alcohol = beerUpdateDto.Alcochol;
-            beer.BrandId = beerUpdateDto.BrandId;
-            await _context.SaveChangesAsync();
-
-            var beerDto = new BeerDto
-            {
-                Id = beer.BeerId,
-                Name = beer.Name,
-                Alcochol = beer.Alcohol,
-                BrandId = beer.BrandId,
-            };
-            return Ok(beerDto);
+            var beerDto = await _beerService.Update(id, beerUpdateDto);
+            return beerDto == null ? NotFound() : Ok(beerDto);
         }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<BeerDto>> Delete(int id)
         {
-            var beer = await _context.Beers.FindAsync(id);
-
-            if (beer == null)
-            {
-                return NotFound();
-            }
-
-            _context.Beers.Remove(beer);
-            await _context.SaveChangesAsync();
-
-            var beerDto = new BeerDto
-            {
-                Id = beer.BeerId,
-                Name = beer.Name,
-                Alcochol = beer.Alcohol,
-                BrandId = beer.BrandId,
-            };
-            return Ok(beerDto);
+            var beerDto = await _beerService.Delete(id);
+            return beerDto == null? NotFound() : Ok(beerDto);
         }
     }
 }

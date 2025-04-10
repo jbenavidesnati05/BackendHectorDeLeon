@@ -63,14 +63,53 @@ namespace BackendHectorDeLeon.Services
 
 
 
-        public Task<BeerDto> Update(int id, BeerUpdateDto beerUpdateDto)
+        public async Task<BeerDto> Update(int id, BeerUpdateDto beerUpdateDto)
         {
-            throw new NotImplementedException();
+            var beer = await _context.Beers.FindAsync(id);
+
+            if (beer != null)
+            {
+                beer.Name = beerUpdateDto.Name;
+                beer.Alcohol = beerUpdateDto.Alcochol;
+                beer.BrandId = beerUpdateDto.BrandId;
+
+                await _context.SaveChangesAsync();
+
+                var beerDto = new BeerDto
+                {
+                    Id = beer.BeerId,
+                    Name = beer.Name,
+                    Alcochol = beer.Alcohol,
+                    BrandId = beer.BrandId,
+                };
+                return beerDto;
+
+            }
+            return null;
         }
 
-        public Task<BeerDto> Delete(int id)
+        public async Task<BeerDto> Delete(int id)
         {
-            throw new NotImplementedException();
+            var beer = await _context.Beers.FindAsync(id);
+
+            if (beer != null)
+            {
+                var beerDto = new BeerDto
+                {
+                    Id = beer.BeerId,
+                    Name = beer.Name,
+                    Alcochol = beer.Alcohol,
+                    BrandId = beer.BrandId,
+                };
+                
+
+                _context.Remove(beer);
+                await _context.SaveChangesAsync();
+
+                return beerDto;
+
+            }
+            return null;
         }
 
 

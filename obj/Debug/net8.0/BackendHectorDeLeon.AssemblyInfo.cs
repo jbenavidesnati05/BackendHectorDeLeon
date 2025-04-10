@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BackendHectorDeLeon")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7959d08fbf7ca31c93577122c3cb4faaf63e464d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b6edca08e97a410ea0defb0046bf5dcb8f28ab00")]
 [assembly: System.Reflection.AssemblyProductAttribute("BackendHectorDeLeon")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BackendHectorDeLeon")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
